@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="title_new">New</string>
+    <string name="title_popular">Popular</string>
+    <string name="oh_shucks">Oh shucks!</string>
+    <string name="no_internet_text">Slow or no internet connection. \nPlease check your internet settings</string>
+</resources>
