@@ -37,7 +37,6 @@ class PhotoRepository {
             val realm = Realm.getDefaultInstance()
             for (model in imageModels) {
                 val results = realm.where<MediaResourceModel>().equalTo("id", model.id).findAll()
-                var base64: String
                 if (results.isEmpty()) {
                     val call =
                         retrofit.create(WebAntApiService::class.java).loadMediaResource(model.id)
