@@ -1,4 +1,4 @@
-package com.test.myapplication.util
+package com.test.myapplication.models
 
 import io.realm.RealmObject
 
