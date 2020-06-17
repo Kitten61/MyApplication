@@ -1,5 +1,7 @@
 package com.test.myapplication.util
 
+import com.test.myapplication.models.MediaResourceModel
+import com.test.myapplication.models.PhotoResponseModel
 import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.http.GET
@@ -13,7 +15,7 @@ interface WebAntApiService {
         @Query("limit") limit: Int,
         @Query("new") new: Boolean,
         @Query("popular") popular: Boolean
-    ): Observable<PhotoResponse>
+    ): Observable<PhotoResponseModel>
 
     @GET("api/media_objects/{id}")
     fun loadMediaResource(

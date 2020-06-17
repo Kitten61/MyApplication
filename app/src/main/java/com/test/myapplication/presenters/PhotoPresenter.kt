@@ -1,7 +1,7 @@
 package com.test.myapplication.presenters
 
 import com.test.myapplication.repository.PhotoRepository
-import com.test.myapplication.util.ImageModel
+import com.test.myapplication.models.ImageModel
 import com.test.myapplication.views.PhotoView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

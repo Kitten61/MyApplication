@@ -4,41 +4,33 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.test.myapplication.R
 import com.test.myapplication.adapters.PhotoRecyclerAdapter
 import com.test.myapplication.presenters.PhotoPresenter
-import com.test.myapplication.util.ImageModel
+import com.test.myapplication.models.ImageModel
 import com.test.myapplication.views.PhotoView
+import kotlinx.android.synthetic.main.fragment_grid.*
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
 
-open class PhotoFragment(private val isPopular: Boolean, private val isNew: Boolean) : MvpAppCompatFragment(), PhotoView {
+open class PhotoFragment(
+    private val isPopular: Boolean,
+    private val isNew: Boolean) : MvpAppCompatFragment(R.layout.fragment_grid), PhotoView {
 
     private var limit = 10
     private var hasNext = true
     private var loadedPages = 1
     private var isLoading = false
     private var mImageModelList = ArrayList<ImageModel>()
-    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    private lateinit var errorLayout: ViewGroup
-    private lateinit var loadProgressBar: ProgressBar
     private lateinit var adapter: PhotoRecyclerAdapter
     private val photoPresenter by moxyPresenter { PhotoPresenter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        errorLayout = view.findViewById(R.id.no_internet_layout)
-        loadProgressBar = view.findViewById(R.id.load_more_progress)
-
-        val gridView: RecyclerView = view.findViewById(R.id.photoGrid)
-
         val mLayoutManager = GridLayoutManager(context, 2)
-        gridView.layoutManager = mLayoutManager
+        photoGrid.layoutManager = mLayoutManager
 
         adapter = PhotoRecyclerAdapter(object: PhotoRecyclerAdapter.OnItemClickListener {
             override fun onClick(imageModel: ImageModel) {
@@ -48,46 +40,35 @@ open class PhotoFragment(private val isPopular: Boolean, private val isNew: Bool
             }
 
         })
-        gridView.adapter = adapter
-
+        photoGrid.adapter = adapter
 
         photoPresenter.loadPhotos(loadedPages, 10, isNew, isPopular)
 
-        gridView.setOnScrollChangeListener { _: View, _: Int, _: Int, _: Int, _: Int ->
+        photoGrid.setOnScrollChangeListener { _: View, _: Int, _: Int, _: Int, _: Int ->
             val lastvisibleitemposition = mLayoutManager.findLastVisibleItemPosition()
             if (lastvisibleitemposition == adapter.itemCount - 1) {
                 if (!isLoading && hasNext) {
                     isLoading = true
                     loadedPages++
-                    loadProgressBar.visibility = View.VISIBLE
+                    load_more_progress.visibility = View.VISIBLE
                     photoPresenter.loadPhotos(loadedPages, 10, isNew, isPopular)
                 }
             }
         }
 
-        swipeRefreshLayout = view.findViewById(R.id.reloadPhotos)
-
-        swipeRefreshLayout.setOnRefreshListener {
+        reloadPhotos.setOnRefreshListener {
             loadedPages = 1
             photoPresenter.loadPhotos(loadedPages, 10, isNew, isPopular)
         }
 
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_grid, container, false)
-    }
-
     override fun loadPhoto(imageModelList: List<ImageModel>) {
-        errorLayout.visibility = View.GONE
-        if (swipeRefreshLayout.isRefreshing) {
+        no_internet_layout.visibility = View.GONE
+        if (reloadPhotos.isRefreshing) {
             mImageModelList.clear()
             adapter.clear()
-            swipeRefreshLayout.isRefreshing = false
+            reloadPhotos.isRefreshing = false
         }
 
         if (imageModelList.size < limit) {
@@ -96,7 +77,7 @@ open class PhotoFragment(private val isPopular: Boolean, private val isNew: Bool
 
         adapter.addAll(imageModelList)
         if (isLoading) {
-            loadProgressBar.visibility = View.GONE
+            load_more_progress.visibility = View.GONE
             isLoading = false
         }
     }
@@ -105,10 +86,10 @@ open class PhotoFragment(private val isPopular: Boolean, private val isNew: Bool
         mImageModelList.clear()
         adapter.clear()
         loadedPages = 1
-        errorLayout.visibility = View.VISIBLE
-        if (swipeRefreshLayout.isRefreshing) swipeRefreshLayout.isRefreshing = false
+        no_internet_layout.visibility = View.VISIBLE
+        if (reloadPhotos.isRefreshing) reloadPhotos.isRefreshing = false
         if (isLoading) {
-            loadProgressBar.visibility = View.GONE
+            load_more_progress.visibility = View.GONE
             isLoading = false
         }
     }

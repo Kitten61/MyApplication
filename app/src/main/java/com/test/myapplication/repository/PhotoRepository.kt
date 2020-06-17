@@ -3,9 +3,9 @@ package com.test.myapplication.repository
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
-import com.test.myapplication.util.ImageModel
-import com.test.myapplication.util.MediaResourceModel
-import com.test.myapplication.util.PhotoResponse
+import com.test.myapplication.models.ImageModel
+import com.test.myapplication.models.MediaResourceModel
+import com.test.myapplication.models.PhotoResponseModel
 import com.test.myapplication.util.WebAntApiService
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -19,7 +19,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 class PhotoRepository {
-    fun loadImages(page: Int, limit: Int, new: Boolean, popular: Boolean): Observable<PhotoResponse> {
+    fun loadImages(page: Int, limit: Int, new: Boolean, popular: Boolean): Observable<PhotoResponseModel> {
         val retrofit = Retrofit.Builder()
             .baseUrl("http://gallery.dev.webant.ru/")
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -64,6 +64,7 @@ class PhotoRepository {
                 }
                 model.bitmap = Bitmap.createScaledBitmap(decodedByte, width, height, false)
             }
+            realm.close()
             subscriber.onSuccess(imageModels)
         }
     }

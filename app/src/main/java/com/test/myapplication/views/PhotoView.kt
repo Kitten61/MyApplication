@@ -1,6 +1,6 @@
 package com.test.myapplication.views
 
-import com.test.myapplication.util.ImageModel
+import com.test.myapplication.models.ImageModel
 import moxy.MvpView
 import moxy.viewstate.strategy.AddToEndStrategy
 import moxy.viewstate.strategy.StateStrategyType

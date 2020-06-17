@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.test.myapplication.R
-import com.test.myapplication.util.ImageModel
+import com.test.myapplication.models.ImageModel
 
 class PhotoRecyclerAdapter(private val listener: OnItemClickListener) :
     RecyclerView.Adapter<PhotoRecyclerAdapter.PhotoViewHolder>() {
